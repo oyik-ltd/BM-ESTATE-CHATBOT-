@@ -1,6 +1,6 @@
 (function () {
   var cfg = {
-    webhookUrl: "https://n8n.srv1662153.hstgr.cloud/webhook/eccc4e29-3b64-4c7b-ad8f-61ff5fe300a6/chat",
+    webhookUrl: "https://n8n.srv1662153.hstgr.cloud/webhook/bb5b0f9e-6960-4081-afb3-5e418c7b6f2e/chat",
     companyName: "BM Estate",
     welcomeMessage: "Hello! Welcome to BM Estate. How can I help you today?",
     inputPlaceholder: "Type your message...",
