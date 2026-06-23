@@ -580,6 +580,14 @@
   function getDisplayTitle(prop) {
     var named = pick(prop.title, prop.name, prop.address, prop.display_name, prop.displayName, prop.propertyName);
     if (named) return named;
+    var parts = [];
+    var beds = pick(prop.beds, prop.bedrooms);
+    var propType = pick(prop.type, prop.property_type);
+    var location = pick(prop.location, prop.area, prop.city, prop.postcode, prop.address);
+    if (beds) parts.push(beds + ' Bed');
+    if (propType) parts.push(propType);
+    if (location) parts.push(location);
+    if (parts.length) return parts.join(' ');
     var code = pick(prop.propcode, prop.code, prop.id);
     if (code) return 'Property ' + code;
     return 'Property';
