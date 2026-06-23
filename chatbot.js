@@ -578,31 +578,42 @@
   }
 
   function getDisplayTitle(prop) {
-    var named = pick(prop.title, prop.name, prop.address, prop.display_name, prop.displayName, prop.propertyName);
+    var named = pick(prop.title, prop.name, prop.display_name, prop.displayName, prop.propertyName);
     if (named) return named;
-    var parts = [];
-    var beds = pick(prop.beds, prop.bedrooms);
-    var propType = pick(prop.type, prop.property_type);
-    var location = pick(prop.location, prop.area, prop.city, prop.postcode, prop.address);
-    if (beds) parts.push(beds + ' Bed');
-    if (propType) parts.push(propType);
-    if (location) parts.push(location);
-    if (parts.length) return parts.join(' ');
+    var a1 = pick(prop.address1);
+    var a2 = pick(prop.address2);
+    var a3 = pick(prop.address3);
+    var a5 = pick(prop.address5);
+    var addrParts = [];
+    if (a1) addrParts.push(a1);
+    if (a2) addrParts.push(a2);
+    if (a3) addrParts.push(a3);
+    if (a5) addrParts.push(a5);
+    if (addrParts.length) return addrParts.join(', ');
+    var fullAddr = pick(prop.address, prop.location, prop.area, prop.city, prop.postcode);
+    if (fullAddr) return fullAddr;
     var code = pick(prop.propcode, prop.code, prop.id);
     if (code) return 'Property ' + code;
     return 'Property';
   }
 
   function getLocationText(prop) {
-    return pick(prop.location, prop.area, prop.city, prop.postcode, prop.address);
+    var loc = pick(prop.location, prop.area, prop.city, prop.postcode, prop.address);
+    if (loc) return loc;
+    var a5 = pick(prop.address5);
+    var pc = pick(prop.postcode);
+    if (a5 && pc) return a5 + ' ' + pc;
+    if (a5) return a5;
+    if (pc) return pc;
+    return '';
   }
 
   function getPriceValue(prop) {
     var raw = hasValue(prop.price) ? prop.price :
-      hasValue(prop.rent) ? prop.rent :
-        hasValue(prop.cost) ? prop.cost :
-          hasValue(prop.priceask) ? prop.priceask :
-            hasValue(prop.price_ask) ? prop.price_ask : '';
+      hasValue(prop.priceask) ? prop.priceask :
+        hasValue(prop.price_ask) ? prop.price_ask :
+          hasValue(prop.rent) ? prop.rent :
+            hasValue(prop.cost) ? prop.cost : '';
     var freq = pick(prop.pricetypefreq, prop.price_type_freq, prop.priceFrequency, prop.frequency);
 
     if (!hasValue(raw)) return '';
@@ -821,7 +832,7 @@
     if (prop.beds || prop.bedrooms) tags.push('\uD83D\uDECF\uFE0F ' + (prop.beds || prop.bedrooms) + ' Bed');
     if (prop.baths || prop.bathrooms) tags.push('\uD83D\uDEC0 ' + (prop.baths || prop.bathrooms) + ' Bath');
     if (prop.sqft || prop.size || prop.area_sqft) tags.push('\uD83D\uDCCF ' + (prop.sqft || prop.size || prop.area_sqft));
-    if (prop.type || prop.property_type) tags.push(prop.type || prop.property_type);
+    if (prop.type || prop.property_type || prop.proptype) tags.push(prop.type || prop.property_type || prop.proptype);
     if (prop.propcode) tags.push(prop.propcode);
     if (tags.length) {
       var tagsEl = document.createElement('div'); tagsEl.className = 'lk-prop-tags';
